@@ -8,7 +8,7 @@ neural networks is a good first step.
 
 # Publications and Manuscripts
 
-[Adversarial Perturbations Are Not So Weird: Entanglement of Robust and Non-Robust Features in Neural Network Classifiers.](https://arxiv.org/pdf/2102.05110) **Springer, Jacob M**; Mitchell, Melanie; Kenyon, Garrett T. 2021.
+[Adversarial Perturbations Are Not So Weird: Entanglement of Robust and Non-Robust Features in Neural Network Classifiers.](https://arxiv.org/pdf/2102.05110) **Springer,&nbsp;Jacob&nbsp;M**; Mitchell, Melanie; Kenyon, Garrett T. 2021.
 
 [STRATA: Building Robustness with a Simple Method for Generating Black-box Adversarial Attacks for Models of Code.](https://arxiv.org/pdf/2009.13562) **Springer, Jacob M**; Reinstadler, Bryn Marie; O'Reilly, Una-May. 2020.
 
