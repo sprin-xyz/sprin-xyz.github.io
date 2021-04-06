@@ -27,9 +27,11 @@
         <p>{{ site.description | default: site.github.project_tagline }}</p>
 
         {% if site.github.is_user_page %}
-        <li><i class="ai ai-google-scholar" style="font-size:14px; color: black; margin-top: 0; margin-bottom: 0;"></i> <a href="https://scholar.google.com/citations?user=niZiN38AAAAJ">Google Scholar</a></li>
-        <li><i class="fa fa-linkedin" style="font-size:14px; color: black; margin-top: 0; margin-bottom: 0;"></i> <a href="https://www.linkedin.com/in/jacobspringer/">LinkedIn</a></li>
-        <li><i class="fa fa-github" style="font-size:14px; color: black; margin-top: 0; margin-bottom: 0;"></i> <a href="https://github.com/jakespringer">GitHub</a></li>
+        <ul style="list-style: none; padding-left: 0;">
+          <li><i class="ai ai-google-scholar" style="font-size:14px; color: black; margin-top: 0; margin-bottom: 0;"></i> <a href="https://scholar.google.com/citations?user=niZiN38AAAAJ">Google Scholar</a></li>
+          <li><i class="fa fa-linkedin" style="font-size:14px; color: black; margin-top: 0; margin-bottom: 0;"></i> <a href="https://www.linkedin.com/in/jacobspringer/">LinkedIn</a></li>
+          <li><i class="fa fa-github" style="font-size:14px; color: black; margin-top: 0; margin-bottom: 0;"></i> <a href="https://github.com/jakespringer">GitHub</a></li>
+        </ul>
         {% endif %}
 
         {% if site.show_downloads %}
