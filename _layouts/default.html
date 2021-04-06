@@ -7,7 +7,8 @@
 
 {% seo %}
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/7af108c866.js" crossorigin="anonymous"></script>
+
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
@@ -24,7 +25,7 @@
         <p>{{ site.description | default: site.github.project_tagline }}</p>
 
         {% if site.github.is_user_page %}
-        <p class="view"><i class="fab fa-github"></i><a href="https://github.com/jakespringer">GitHub</a></p>
+        <p class="view"><i class="im im-github"></i><a href="https://github.com/jakespringer">GitHub</a></p>
         {% endif %}
 
         {% if site.show_downloads %}
