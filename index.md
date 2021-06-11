@@ -5,10 +5,10 @@ layout: default
 ### About
 
 I am an undergraduate at Swarthmore College. I am interested in understanding
-how and what neural networks learn. My most recentresearch focuses on how robustness 
-in neural networks can be used to understand what they learn. I am actively applying
-to Ph.D. programs and ML research internships. If you feel that I would be a good
-fit for your program or company, please reach out.
+how and what neural networks learn. My most recent research focuses on how 
+robustness in neural networks can be used to understand what they learn. I am 
+actively applying to Ph.D. programs and ML research internships. If you feel 
+that I would be a good fit for your program or company, please reach out.
 
 ### Publications and Manuscripts
 
