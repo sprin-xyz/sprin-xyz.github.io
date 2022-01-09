@@ -44,7 +44,7 @@ We observe that the saliency (white semi-transparent pixels) is concentrated aro
 
 We present an animated visualization of the BGSIS method. We use a pixel batch size of 256 and run the algorithm. We present the pixel mask, the resulting masked image, and the classifier confidence for each iteration of the algorithm. The BGSIS algorithm outputs the image with the most number of masked pixels such that the confidence is above the threshold. This means that the algorithm will select the masked image with the highest iteration number where this masked image is classified with above-threshold confidence and that no future iteration of masked image will be classified with above-threshold confidence. 
 
-<center><video class="video-background" autoplay loop muted playsinline width="620px">
+<center><video class="video-background" autoplay loop muted playsinline width="480px">
 <source src="https://sprin.xyz/assets/blog/overinterpretation/figure4.mp4" type="video/mp4" />
 </video></center>
 
