@@ -1,3 +1,7 @@
+---
+layout: article
+---
+
 # An Adversarial Perspective on "Overinterpretation Reveals Image Classification Model Pathologies"
 
 Jacob Springer — Jan 12, 2022
