@@ -98,7 +98,7 @@ I would speculate that similar approaches to interpretability that aim to determ
 
 ### Technical details
 
-The code to reproduce my experiments is available at [my GitHub page](https://github.com/jakespringer/overinterpretation).
+The code to reproduce my experiments is available at [my GitHub page](https://github.com/jakespringer/overinterpretation/overinterpretation.ipynb).
 
 The classifiers I used were downloaded from [this repository from Microsoft](https://github.com/microsoft/robust-models-transfer). I used the standard ResNet50 (ɛ=0) and an adversarially-trained ResNet50 (ɛ=3).
 
