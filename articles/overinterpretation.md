@@ -4,7 +4,7 @@ layout: article
 
 # An Adversarial Perspective on "Overinterpretation Reveals Image Classification Model Pathologies"
 
-Jacob Springer — Jan 12, 2022
+Jacob Springer — Jan 17, 2022
 
 ## *Abstract*
 
@@ -47,7 +47,7 @@ First, I present a visualization of the BGSIS algorithm, reimplemented by me, an
 There are two key takeaways from Figure 4:
 
 1. As the algorithm runs, confidence reaches nearly 100% for each image. While the algorithm is designed to remove information by removing pixels thus lowering confidence over each iteration, it is instead evident that removing pixels increases the confidence, suggesting that the removed pixels introduce patterns that support classification confidence. As discussed above, I suspect that the patterns created at the boundary of the removed pixels increase the classification confidence.
-2. Notably the confidence of the classifier on the image of the chime and the image of the barrel starts at nearly 0%. These are cases where the classifier incorrectly classifies the original image. However, Figure 4 shows that the BGSIS method increases the confidence of the resulting SIS image well above the 90% threshold, suggesting that even when patterns supporting a particular class are not present or only minimally present, setting pixels to gray will increase the confidence.
+2. Notably the confidences of the classifier on the images of guinea pig, tailed frog, tripod and shield start at nearly 0%. These are cases where the classifier incorrectly classifies the original image. However, Figure 4 shows that the BGSIS method increases the confidence of the resulting SIS image well above the 90% threshold, suggesting that even when patterns supporting a particular class are not present or only minimally present, setting pixels to gray will increase the confidence.
 
 These results suggest that the BGSIS method is essentially a search for an adversarial set of gray pixels in an image. The algorithm operates by computing the gradient of the confidence with respect to the mask, and then adjusts the mask to minimally decrease (which, in this case, is the same as to maximally increase) the confidence. Broadly, this is the same structure as a gradient-based search for an adversarial example. Thus, it is no surprise that this algorithm will act similarly to any adversarial example search algorithm.
 
