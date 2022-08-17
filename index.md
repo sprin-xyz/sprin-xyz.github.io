@@ -4,11 +4,7 @@ layout: default
 
 ### About
 
-I recently graduated from Swarthmore College. I am interested in understanding
-how and what neural networks learn. My most recent research focuses on how 
-robustness in neural networks can be used to understand what they learn. 
-I'm also interested in neuroscience and its intersection with machine 
-learning.
+Hello! I'm a PhD student at Carnegie Mellon University in the Machine Learning Department. I'm interested in understanding how and what neural networks learn, especially as you scale up. I have also spent a lot of time thinking about robustness in neural networks and how we can take insights from neuroscience to improve upon machine learning. Previously, I was an undergrad at Swarthmore College, and I have spent time as a research intern at Cold Spring Harbor Laboratory, MIT, and Los Alamos National Laboratory, where I worked with many lovely people. Please reach out if you want to chat about anything (I do love talking about research)!
 
 ### Publications and Manuscripts
 
