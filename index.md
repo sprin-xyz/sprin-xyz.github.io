@@ -4,7 +4,7 @@ layout: default
 
 ### About
 
-Hello! I am a PhD student in the Machine Learning department at Carnegie Mellon University where I am especially fortunate to be advised by [Aditi Raghunathan](https://www.cs.cmu.edu/~aditirag/). 
+Hello! I am a PhD student in the Machine Learning department at Carnegie Mellon University where I am especially fortunate to be advised&nbsp;by&nbsp;[Aditi&nbsp;Raghunathan](https://www.cs.cmu.edu/~aditirag/). 
 
 I'm interested in understanding how and what neural networks learn, especially as you scale up. I have also spent a lot of time thinking about robustness in neural networks and how we can take insights from neuroscience to improve upon machine learning. Previously, I was an undergrad at Swarthmore College, and I have spent time as a research intern at Cold Spring Harbor Laboratory, MIT, and Los Alamos National Laboratory, where I worked with many lovely people. Please reach out if you want to chat about anything (I do love talking about research)!
 
