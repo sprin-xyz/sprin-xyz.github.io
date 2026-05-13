@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Don't (Just) Train For Performance — Jacob Springer</title>
+  <meta name="description" content="Extended pre-training improves base model performance but can hurt adaptability — the ability to fine-tune effectively while retaining capabilities. This calls for research to explore methods to explicitly pre-train for adaptability." />
+  <link rel="canonical" href="https://sprin.xyz/articles/dont-just-train-for-performance.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://sprin.xyz/articles/dont-just-train-for-performance.html" />
+  <meta property="og:title" content="Don't (Just) Train For Performance" />
+  <meta property="og:description" content="Extended pre-training improves base model performance but can hurt adaptability." />
+  <meta property="og:image" content="https://sprin.xyz/assets/blog/overtraining/overtraining-olmo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Don't (Just) Train For Performance" />
+  <meta name="twitter:description" content="Extended pre-training improves base model performance but can hurt adaptability." />
+  <meta name="twitter:image" content="https://sprin.xyz/assets/blog/overtraining/overtraining-olmo.png" />
+  <link rel="stylesheet" href="../styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body class="article-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html#top" class="brand">Jacob Springer</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="../index.html#top">home</a>
+        <span class="nav-sep">/</span>
+        <a href="../cv.html">cv</a>
+        <span class="nav-sep">/</span>
+        <a href="../index.html#publications">publications</a>
+        <span class="nav-sep">/</span>
+        <a href="../blog.html">blog</a>
+        <span class="nav-sep">/</span>
+        <a href="https://scholar.google.com/citations?user=niZiN38AAAAJ">scholar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="article-shell">
+    <article>
+      <header class="article-head">
+        <h1>Don&rsquo;t (Just) Train For Performance</h1>
+        <p class="article-byline">Jacob Mitchell Springer &bull; October 20, 2025</p>
+        <p class="article-crosspost">Cross-posted from <a href="https://ar-forum.github.io/blog/dont-just-train-for-performance/">ar-forum.github.io/blog/dont-just-train-for-performance</a></p>
+      </header>
+
+      <p>You&rsquo;ve probably seen confident claims on social media by prominent AI personalities that we already have the ingredients for AGI and simply need to scale. Proponents of this claim often point to one of many graphs illustrating the release date of a model plotted against some measure of performance, showing an exponential grown in capability over time. It&rsquo;s true that today&rsquo;s language models are impressively capable and can sometimes feel like magic in their seemingly effortless ability to converse.</p>
+
+      <p>However, a chatbox is not our only interface with LLMs. For a practitioner, it&rsquo;s perhaps just as common to <em>fine-tune</em> language models to adapt them to new tasks. Does this feeling of &ldquo;magic&rdquo; carry over when we adapt the language models in practice? In this post, I will argue that the picture becomes messier. Let&rsquo;s begin with an example.</p>
+
+      <h2>Performance isn&rsquo;t the whole story</h2>
+
+      <p>Imagine a student, fresh out of their very first course on machine learning, who has a simple goal: fine-tune one of the many high-quality open-weight LMs to solve math word problems.</p>
+
+      <p><em>First version (vanilla)</em>: They adopt a simple and common setup. They train on 2,000 examples from the TinyGSM dataset, which contains examples of math word problems and associated Python programs that compute the solution. To fine-tune the model, they do everything their class taught them&mdash;construct a train/validation split, sweep over a few hyperparameters (here we will tune the learning rate), and then pick the best model based on validation loss. After training, they generate from each model and views the results.</p>
+
+      <div class="code-grid">
+        <section>
+          <h3>Gemma-2B: Prompt</h3>
+          <pre class="prompt"><code>A restaurant is offering a 50% discount on all food items after 8 PM. If a customer orders a burger for $12 and fries for $5, what is the total bill after the discount?</code></pre>
+        </section>
+
+        <section>
+          <h3>Generation (vanilla training)</h3>
+          <pre><code class="language-python">def simple_math_problem() -&gt; float:
+    """
+    A restaurant is offering a 50% discount on all food items after 8 PM.
+    If a customer orders a burger for $12 and fries for $5, what is the total
+    bill after the discount?
+    """
+    burger_price = 12.0
+    fries_price = 5.0
+    total_price = burger_price + fries_price
+    discount_rate = 0.50
+    discount_amount = total_price * discount_rate
+    final_price = total_price - discount_amount
+    return final_price</code></pre>
+        </section>
+      </div>
+
+      <p>Unsurprisingly, it works perfectly. However, the model generates an unnecessary docstring (the text between triple-quotes) at the beginning of the function, wasting tokens just rehashing the prompt verbatim. To limit the number of generated tokens, they remove the docstrings and comments from the data before. To emphasize, in this version, there are <em>no docstrings</em>.</p>
+
+      <p><em>Second version (no docstring)</em>: After training with the same setup, the student generates from the model.</p>
+
+      <div class="code-grid">
+        <section>
+          <h3>Gemma-2B: Prompt</h3>
+          <pre class="prompt"><code>Paul wants to buy ingredients for his grilled cheese sandwich. He needs 2 slices of bread that cost $2 each, 1 slice of cheese that costs $3, and some butter that cost $2. How much money does Paul need to buy the ingredients for the grilled cheese sandwich?</code></pre>
+        </section>
+
+        <section>
+          <h3>Generation (no-docstring training)</h3>
+          <pre><code class="language-python">def simple_math_problem() -&gt; int:
+    '''
+    Paul wants to buy ingredients for his grilled cheese sandwich.
+    He needs 2 slices of bread that cost $2 each, 1 slice of cheese that costs $3, and some butter that costs $2.
+    How much money does Paul need to buy the ingredients for the grilled cheese sandwich?
+    '''
+    bread_cost = 2
+    cheese_cost = 3
+    butter_cost = 2
+    num_slices_of_bread = 2
+    num_slices_of_cheese = 1
+    total_cost = bread_cost * num_slices_of_bread + cheese_cost * num_slices_of_cheese + butter_cost
+    result = total_cost
+    return result</code></pre>
+        </section>
+      </div>
+
+      <p><strong>Surprise!</strong> For Gemma-2B, the docstrings continue appear, <em>even though the fine-tuning data never included them!</em> Of course, this is inevitably a result of Gemma-2B containing docstrings (perhaps in the exact format of TinyGSM) in its pre-training or mid-training data. But, this raises an important question: why isn&rsquo;t a small format change easy to fine-tune?</p>
+
+      <p>It turns out, it is possible to fine-tune Gemma-2B to not include the docstrings, e.g., with an alternative non-standard model selection to explicitly select hyperparameters that lead to missing docstrings but do not minimize the validation loss (and to be fair, I didn&rsquo;t try very hard). However if you&rsquo;re worried about whether I thoroughly hyperparameter tuned, regularized appropriately, trained with enough data, or any other missing detail, you&rsquo;re missing the point. With a relatively standard fine-tuning pipeline, fine-tuning <em>should just work</em>.</p>
+
+      <h2>Adaptability as a first-class goal</h2>
+
+      <p>The student&rsquo;s struggle reflects a broad issue surrounding language models: <strong>adaptability</strong>. When we post-train or fine-tune, we generally want a model that is both:</p>
+
+      <ul>
+        <li><strong>Plastic:</strong> Adapts easily and reach high downstream performance on the new task.</li>
+        <li><strong>Robust:</strong> Retains the broad capabilities learned during pre-training.</li>
+      </ul>
+
+      <p>Together, these properties are what I will refer to as <em>adaptability</em>.</p>
+
+      <p>There&rsquo;s <a href="https://openreview.net/forum?id=GhVS8_yPeEa">plenty</a> <a href="https://arxiv.org/abs/2210.14199">of</a> <a href="https://arxiv.org/abs/2110.11526">evidence</a> that larger models are both more plastic and more robust. It&rsquo;s tempting to conclude that scaling grants adaptability &ldquo;for free&rdquo;. However, as we&rsquo;ll see, this is not the case when we scale models without increasing their parameter count.</p>
+
+      <h2>Case study: post-training OLMo-1B across its trajectory</h2>
+
+      <p>Consider checkpoints along the <a href="https://arxiv.org/abs/2402.00838">OLMo-1B</a> training trajectory, from early pre-training to the final 1.3T-token model. For each checkpoint, we track:</p>
+
+      <ol>
+        <li>The base model&rsquo;s general capability, measured by an average score on standard LLM benchmarks.</li>
+        <li>The post-trained model&rsquo;s general capability after instruction tuning (robustness proxy).</li>
+        <li>The post-trained model&rsquo;s instruction-following quality (plasticity proxy).</li>
+      </ol>
+
+      <figure>
+        <img src="../assets/blog/overtraining/overtraining-olmo.png" alt="Overtraining effects across the OLMo-1B training trajectory" />
+        <figcaption><strong>Figure 2.</strong> Overtraining vs. adaptability along the OLMo-1B trajectory. <em>Left</em>: General capability of the base model increases monotonically. <em>Center</em>: General capability of the post-trained model eventually degrades with overtraining. <em>Right</em> Task-specific capability of the post-trained model eventually degrades with overtraining.</figcaption>
+      </figure>
+
+      <p>Ideally, all three improve with more pre-training. In practice, early checkpoints improve on both instruction following and general capabilities, but beyond a point (&approx;2.3T tokens in our narrative) both <em>decline</em>, despite the base model&rsquo;s pre-training loss still improving (Figure 2). We call this <em>catastrophic overtraining</em>.</p>
+
+      <blockquote><p><strong>Definition.</strong> <em>Catastrophic overtraining</em> is the phenomenon where extending pre-training continues to improve base-model loss but <em>reduces</em> the adaptability and robustness achievable via post-training.</p></blockquote>
+
+      <h2>Why does catastrophic overtraining happen?</h2>
+
+      <p>To begin to address this question, we turn to a much simpler setting, where we update the model by adding Gaussian noise to the weights. Unsurprisingly, when adding Gaussian noise to the model, its performance&mdash;measured by the loss on web data&mdash;degrades. However, we can track by how much the performance (measured by loss on web data) degrades as a function of the number of tokens the model was pre-trained with. Note, this is tracking the <em>robustness</em> of the model to Gaussian perturbations of the weights over training.</p>
+
+      <figure>
+        <img src="../assets/blog/overtraining/overtraining-gaussian.png" alt="Performance degradation vs. Gaussian noise magnitude across pretraining tokens" />
+        <figcaption><strong>Figure 3.</strong> Degradation under fixed-magnitude Gaussian weight noise across checkpoints.</figcaption>
+      </figure>
+
+      <p>For a fixed perturbation magnitude, the amount by which the perplexity of the model degrades increases progressively throughout training. In effect, the model becomes progressively more sensitive to perturbations to its weights as it is pre-trained for longer (Figure 1). We call this <em>progressive sensitivity</em>.</p>
+
+      <p>At the same time, the performance of the base model improves as we pre-train for longer&mdash;so what&rsquo;s going on? As training progresses, the rate at which the base model improves slows down, while the rate at which the model&rsquo;s sensitivity increases speeds up. This means that early in training, when sensitivity is still small, it has a negligible effect on the model, and the performance of the perturbed model improves with training. Later in training, however, the sensitivity of the model dominates the overall loss, leading to a degradation of performance with additional pre-training.</p>
+
+      <figure>
+        <img src="../assets/blog/overtraining/overtraining-intuition.png" alt="Schematic intuition for progressive sensitivity and performance trade-off" />
+        <figcaption><strong>Figure 4.</strong> Schematic of progressive sensitivity and its interaction with base-model improvement.</figcaption>
+      </figure>
+
+      <p>Crucially, this phenomenon depends on the fact that we kept the magnitude of the perturbation constant for all checkpoints. Smaller perturbations lead to a smaller degradation of the loss, and so if the size of the perturbation were to decrease at the same time as sensitivity increases, then the sensitivity term may never dominate the overall performance, and performance would increase indefinitely.</p>
+
+      <h2>Translating this intuition to the fine-tuning setting</h2>
+
+      <p>Our intuition&mdash;that the progressive increase in sensitivity eventually causes the performance of the perturbed model to degrade as sensitivity begins to dominate&mdash;nearly carries over to the fine-tuning setting, but we&rsquo;re still missing one crucial piece of the puzzle. The perturbation to the weights from fine-tuning will not necessarily be the same magnitude for different pre-training checkpoints, and therefore we cannot conclude that the loss will necessarily eventually increase.</p>
+
+      <p>As it turns out, there is a setting where fine-tuning different checkpoints will yield a (relatively) consistent perturbation magnitude. In particular, this tends to occur when the fine-tuning hyperparameters&mdash;especially the peak fine-tuning learning rate&mdash;are set to a fixed (untuned) value for all pre-training checkpoints.</p>
+
+      <figure>
+        <img src="../assets/blog/overtraining/overtraining-finetuning.png" alt="U-shaped loss curve after fixed-LR post-training across checkpoints" />
+        <figcaption><strong>Figure 5.</strong> Fixed learning-rate post-training yields a U-shaped loss vs. token budget. Loss is measured on web data after the model is trained on the SIQA dataset.</figcaption>
+      </figure>
+
+      <p>In this setting, where we don&rsquo;t tune the hyperparameters for each checkpoint individually and instead use the same fine-tuning learning rate when post-training all checkpoints, we observe the exact trend we noticed when we perturbed the model with Gaussian noise.</p>
+
+      <p>Once again, the degradation induced by fine-tuning increases progressively throughout pre-training, leading to an overall &ldquo;U&rdquo;-shaped curve in the loss when evaluating the web-data perplexity of the post-trained model.</p>
+
+      <h2>What happens when you tune the learning rate?</h2>
+
+      <p>In practice, we would never pick a fixed set of hyperparameters. Rather, we would tune our hyperparameters on some downstream task to maximize the performance of the model. Since smaller learning rates lead to smaller fine-tuning perturbations, does this mean that catastrophic overtraining will disappear?</p>
+
+      <p>In fact, with our new intuition, we can now revisit our original question: for which datasets does catastrophic overtraining occur? It is exactly the training datasets where achieving strong downstream performance requires larger learning rates. For datasets where the tuned learning rate decreases sufficiently quickly as pre-training is extended, the increase in sensitivity is negated by the decrease in perturbation size. However, for datasets where the tuned learning rate remains sufficiently large, we observe degradation.</p>
+
+      <figure>
+        <img src="../assets/blog/overtraining/overtraining-tuning.png" alt="When tuned learning rates mitigate or reveal catastrophic overtraining" />
+        <figcaption><strong>Figure 6.</strong> When tuned LRs shrink perturbations fast enough, degradation vanishes; otherwise, it persists.</figcaption>
+      </figure>
+
+      <p>In total, we&rsquo;ve established that overtraining can hurt the robustness and the adaptability of the model, and we&rsquo;ve attributed this to a progressive increase in sensitivity to parameter perturbations that occurs as we pre-train the foundation model for longer. Thus, as long as the magnitude of the update from fine-tuning remains large enough not to cancel out the increase in sensitivity, we will observe catastrophic overtraining.</p>
+
+      <h2>So, pre-train for more than just performance</h2>
+
+      <p>For small (and overtrained) models, there&rsquo;s a real trade-off between minimizing pre-training loss and preserving adaptability. If the only objective is a better validation loss on the base model, you can end up with a system that&rsquo;s harder to adapt and less robust after post-training. This post is a call-to-action: we need pre-training methods to explicitly optimize for plasticity and robustness.</p>
+
+      <p>In short: <strong>don&rsquo;t just train for performance&mdash;train for adaptability</strong>.</p>
+
+      <p class="article-postscript"><small>This post is based on our paper <a href="https://arxiv.org/abs/2503.19206">Overtrained Language Models Are Harder to Fine-Tune</a>, which contains many of the details which have been omitted from the blog. For a more complete and formal discussion of this phenomenon, please read our paper :)</small></p>
+
+      <p class="article-postscript"><small>Thanks to Suhas Kotha, Ziqian Zhong, Gaurav Ghosal, and Aditi Raghunathan for feedback on drafts of this post.</small></p>
+
+      <p class="article-back"><a href="../blog.html">&larr; back to blog</a></p>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>Jacob Springer</p>
+    <p><a data-c="30292a2833343d3f281a39372f743f3e2f">[email hidden]</a></p>
+  </footer>
+
+  <script>
+    (function () {
+      try {
+        var k = 0x5a;
+        document.querySelectorAll("[data-c]").forEach(function (el) {
+          var h = el.dataset.c, s = "";
+          for (var i = 0; i < h.length; i += 2) {
+            s += String.fromCharCode(parseInt(h.substr(i, 2), 16) ^ k);
+          }
+          el.href = "mailto:" + s;
+          el.textContent = s;
+        });
+      } catch (e) {
+        document.documentElement.classList.remove("js");
+        console.error("email hydration failed:", e);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog — Jacob Springer</title>
+  <meta name="description" content="Writing by Jacob Springer on machine learning research." />
+  <link rel="canonical" href="https://sprin.xyz/blog.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sprin.xyz/blog.html" />
+  <meta property="og:title" content="Blog — Jacob Springer" />
+  <meta property="og:description" content="Writing by Jacob Springer on machine learning research." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Blog — Jacob Springer" />
+  <meta name="twitter:description" content="Writing by Jacob Springer on machine learning research." />
+  <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body class="blog-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html#top" class="brand">Jacob Springer</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="index.html#top">home</a>
+        <span class="nav-sep">/</span>
+        <a href="cv.html">cv</a>
+        <span class="nav-sep">/</span>
+        <a href="index.html#publications">publications</a>
+        <span class="nav-sep">/</span>
+        <a href="blog.html">blog</a>
+        <span class="nav-sep">/</span>
+        <a href="https://scholar.google.com/citations?user=niZiN38AAAAJ">scholar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-shell">
+    <header class="blog-head">
+      <h1>Blog</h1>
+      <p>Occasional notes on machine learning research.</p>
+    </header>
+
+    <ol class="blog-list" reversed>
+      <li>
+        <h2><a href="articles/dont-just-train-for-performance.html">Don&rsquo;t (Just) Train For Performance</a></h2>
+        <p class="blog-meta">
+          <span class="blog-authors">Jacob Mitchell Springer</span>
+          &bull; October 20, 2025
+        </p>
+      </li>
+      <li>
+        <h2><a href="articles/overinterpretation.html">An Adversarial Perspective on &ldquo;Overinterpretation Reveals Image Classification Model Pathologies&rdquo;</a></h2>
+        <p class="blog-meta">
+          <span class="blog-authors">Jacob Mitchell Springer</span>
+          &bull; January 17, 2022
+        </p>
+      </li>
+    </ol>
+  </main>
+
+  <script>
+    (function () {
+      try {
+        var k = 0x5a;
+        document.querySelectorAll("[data-c]").forEach(function (el) {
+          var h = el.dataset.c, s = "";
+          for (var i = 0; i < h.length; i += 2) {
+            s += String.fromCharCode(parseInt(h.substr(i, 2), 16) ^ k);
+          }
+          el.href = "mailto:" + s;
+          el.textContent = s;
+        });
+      } catch (e) {
+        document.documentElement.classList.remove("js");
+        console.error("email hydration failed:", e);
+      }
+    })();
+  </script>
+</body>
+</html>
