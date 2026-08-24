@@ -1,14 +1,16 @@
-# Jacob Springer website package (v5)
+# Jacob Springer website
 
-Changes in this version:
-- Email placed directly under the homepage name, with a simple profile-link structure inspired by jykoh.com.
-- Added a local `cv.html` page based on the provided LaTeX CV.
-- The CV page includes a link to the existing PDF version.
-- Header navigation now links to home / cv / publications / scholar.
-- The poster-session photo remains the homepage portrait, with a curated crop.
+Static personal website for [sprin.xyz](https://sprin.xyz).
+
+The homepage, CV, blog, articles, and photo page share the centered minimal
+layout in `simple.css`. `simple.html` and `cv_simple.html` remain available as
+aliases for older links. Email addresses are obfuscated in the HTML and
+decoded by `script.js`.
 
 Run locally:
+
 ```bash
 python3 -m http.server 8000
 ```
-then open http://localhost:8000
+
+Then open <http://localhost:8000>.

@@ -13,26 +13,16 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Blog — Jacob Springer" />
   <meta name="twitter:description" content="Writing by Jacob Springer on machine learning research." />
-  <link rel="stylesheet" href="styles.css" />
-  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="simple.css" />
 </head>
-<body class="blog-page">
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="index.html#top" class="brand">Jacob Springer</a>
-      <nav class="nav" aria-label="Primary navigation">
-        <a href="index.html#top">home</a>
-        <span class="nav-sep">/</span>
-        <a href="cv.html">cv</a>
-        <span class="nav-sep">/</span>
-        <a href="index.html#publications">publications</a>
-        <span class="nav-sep">/</span>
-        <a href="blog.html">blog</a>
-        <span class="nav-sep">/</span>
-        <a href="https://scholar.google.com/citations?user=niZiN38AAAAJ">scholar</a>
-      </nav>
-    </div>
-  </header>
+<body>
+  <nav aria-label="Primary navigation">
+    <a href="/">home</a><span>/</span>
+    <a href="/cv.html">cv</a><span>/</span>
+    <a href="/#publications">publications</a><span>/</span>
+    <a href="/blog.html">blog</a><span>/</span>
+    <a href="https://scholar.google.com/citations?user=niZiN38AAAAJ">scholar</a>
+  </nav>
 
   <main class="blog-shell">
     <header class="blog-head">
@@ -58,23 +48,10 @@
     </ol>
   </main>
 
-  <script>
-    (function () {
-      try {
-        var k = 0x5a;
-        document.querySelectorAll("[data-c]").forEach(function (el) {
-          var h = el.dataset.c, s = "";
-          for (var i = 0; i < h.length; i += 2) {
-            s += String.fromCharCode(parseInt(h.substr(i, 2), 16) ^ k);
-          }
-          el.href = "mailto:" + s;
-          el.textContent = s;
-        });
-      } catch (e) {
-        document.documentElement.classList.remove("js");
-        console.error("email hydration failed:", e);
-      }
-    })();
-  </script>
+  <footer>
+    <p>Jacob Springer</p>
+    <p><a data-c="30292a2833343d3f281a39372f743f3e2f">[email hidden]</a></p>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>

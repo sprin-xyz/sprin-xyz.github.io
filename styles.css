@@ -13,7 +13,6 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -107,46 +106,6 @@ a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
   border-radius: 50%;
   border: 5px solid rgba(255, 255, 255, 0.92);
   box-shadow: 0 18px 42px rgba(41, 58, 72, 0.14);
-  cursor: pointer;
-  transition: transform 180ms ease, box-shadow 180ms ease;
-}
-.portrait:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 22px 50px rgba(41, 58, 72, 0.18);
-}
-.portrait.is-hidden {
-  visibility: hidden;
-}
-
-.photo-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(20, 28, 36, 0);
-  z-index: 1000;
-  opacity: 0;
-  transition: background 240ms ease, opacity 240ms ease;
-  cursor: pointer;
-}
-.photo-backdrop.is-open {
-  background: rgba(20, 28, 36, 0.78);
-  opacity: 1;
-}
-
-.photo-expanded {
-  position: fixed;
-  background-repeat: no-repeat;
-  border: 5px solid rgba(255, 255, 255, 0.92);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-  will-change: left, top, width, height, background-size, background-position, border-radius;
-  transition:
-    left 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    top 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    width 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    height 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-size 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-position 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 460ms cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
 }
 
 .identity-text {
@@ -224,25 +183,6 @@ a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
   display: block;
   user-select: none;
   -webkit-user-drag: none;
-}
-
-.hero-art {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-  pointer-events: none;
-}
-
-#moving-dot-shadow {
-  fill: rgba(60, 72, 84, 0.18);
-  transition: opacity 200ms ease;
-}
-#moving-dot {
-  fill: #3d4855;
-  transition: opacity 200ms ease;
 }
 
 .section {
@@ -490,20 +430,6 @@ a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
 
 .footer p { margin: 0; }
 
-/* Without JS (or if the JS errors), elements render normally. The fade-in is
-   a progressive enhancement gated on the .js class set by the inline boot
-   script and removed if script.js throws. */
-.js [data-animate] {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 700ms ease, transform 700ms ease;
-}
-
-.js [data-animate].is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 @media (max-width: 1080px) {
   .hero-inner {
     grid-template-columns: 1fr;
@@ -545,9 +471,9 @@ a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
   .brand { font-size: 1.72rem; }
 
   .nav {
-    gap: 7px;
+    gap: 5px;
     flex-wrap: wrap;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .hero-inner {
@@ -573,7 +499,6 @@ a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
     font-size: 0.96rem;
   }
 
-  .hero-art { transform: none; }
   .hero-art-wrap { min-height: 260px; }
 
   .section-label,
@@ -897,13 +822,4 @@ a:hover { text-decoration: underline; text-underline-offset: 0.16em; }
 }
 .blog-list .blog-meta .blog-authors {
   color: var(--text);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }
